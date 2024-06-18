@@ -1,0 +1,43 @@
+name: Execute Colab Notebook
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minute
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  execute-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        pip install gdown
+        pip install os
+
+    - name: Execute Colab Notebook
+      env:
+        GITHUB_TOKEN: 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
+      run: |
+        NOTEBOOK_URL="https://colab.research.google.com/drive/1RejrXLgAUlHE6iIbdcx7VZ59FbEP8Ghp"
+        OUTPUT_PATH="output.ipynb"
+        
+        # Download the Colab notebook
+        gdown --id 1RejrXLgAUlHE6iIbdcx7VZ59FbEP8Ghp -O test_colab.ipynb
+        
+        # Execute the notebook using Colab's API
+        curl -X POST \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          -F "document=@input.ipynb" \
+          -F "output=@${OUTPUT_PATH}" \
+          https://colab.research.google.com/drive/1RejrXLgAUlHE6iIbdcx7VZ59FbEP8Ghp
+        
+        # Upload the executed notebook back to the repository
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add $OUTPUT_PATH
+        git commit -m "Execute Colab Notebook"
+        git push
