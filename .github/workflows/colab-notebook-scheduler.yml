@@ -25,7 +25,7 @@ jobs:
         OUTPUT_PATH="output.ipynb"
         
         # Download the Colab notebook
-        gdown --id 1RejrXLgAUlHE6iIbdcx7VZ59FbEP8Ghp -O test_colab.ipynb
+        gdown --id 1RejrXLgAUlHE6iIbdcx7VZ59FbEP8Ghp -O input.ipynb
         
         # Execute the notebook using Colab's API
         curl -X POST \
