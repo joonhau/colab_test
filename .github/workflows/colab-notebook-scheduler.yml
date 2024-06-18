@@ -16,7 +16,6 @@ jobs:
     - name: Install dependencies
       run: |
         pip install gdown
-        pip install os
 
     - name: Execute Colab Notebook
       env:
